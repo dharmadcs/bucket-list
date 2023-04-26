@@ -1,7 +1,6 @@
 import os
 from os.path import join, dirname
 from dotenv import load_dotenv
-
 from flask import Flask, render_template, request, jsonify
 from pymongo import MongoClient
 
@@ -49,14 +48,11 @@ def bucket_get():
     return jsonify({'buckets': buckets_list})
 
 #Tugas Tombol API /delete
-@app.route("/bucket/delete", methods=["POST"])
-def bucket_delete():
-    bucket_delete = request.form['num_give']
-    db.bucket.update_one(
-        {'num': int(bucket_delete) }, 
-        {'$set': {'done': 0}}
-    )
-    return jsonify({'buckets': bucket_delete})
+@app.route("/delete", methods=["POST"])
+def delete_bucket():
+    bucket_num = request.form['num_give']
+    db.bucket.delete_one({'num': int(bucket_num)})
+    return jsonify({'msg': 'Bucket deleted successfully'})
 
 if __name__ == '__main__':
    app.run('0.0.0.0', port=5000, debug=True)
